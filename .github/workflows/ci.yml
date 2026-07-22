@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    paths:
+      - 'shippo-api/**'
+  pull_request:
+    paths:
+      - 'shippo-api/**'
+
+defaults:
+  run:
+    working-directory: shippo-api
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.0', '8.1', '8.2', '8.3']
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: pcov
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Create coverage directory
+        run: mkdir -p build/logs
+
+      - name: Run PHPStan
+        run: composer analyse
+
+      - name: Run tests with coverage
+        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+      - name: Check coverage threshold
+        if: matrix.php == '8.3'
+        run: |
+          php -r "
+          \$xml = simplexml_load_file('build/logs/clover.xml');
+          \$metrics = \$xml->project->metrics;
+          \$covered = (int) \$metrics['coveredstatements'];
+          \$total = (int) \$metrics['statements'];
+          \$pct = \$total > 0 ? round((\$covered / \$total) * 100, 2) : 0;
+          echo \"Coverage: {\$pct}% ({\$covered}/{\$total})\n\";
+          if (\$pct < 80) { fwrite(STDERR, \"Coverage below 80%\n\"); exit(1); }
+          "
