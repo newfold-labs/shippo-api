@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="Shippo API PHP Client">
+    <description>PSR-12 coding standard for Shippo API PHP Client.</description>
+    <file>src</file>
+    <file>tests</file>
+    <rule ref="PSR12"/>
+</ruleset>
