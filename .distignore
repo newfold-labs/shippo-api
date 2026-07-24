@@ -9,3 +9,7 @@ vendor/phar-io
 vendor/sebastian
 vendor/theseer
 tests/
+*.neon
+*.dist
+composer.json
+composer.lock

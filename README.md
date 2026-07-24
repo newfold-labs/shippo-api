@@ -10,8 +10,20 @@ Modern, type-safe PHP client for the [Shippo REST API](https://docs.goshippo.com
 
 ## Installation
 
+In your composer.json file add these lines:
 ```bash
-composer require newfold-labs/shippo-api
+"repositories": {
+    "newfold": {
+      "type": "composer",
+      "url": "https://newfold-labs.github.io/satis/",
+      "only": [
+        "newfold-labs/*"
+      ]
+    }
+  },
+    "require": {
+    "newfold-labs/shippo-api": "^1.0.0"
+  },
 ```
 
 ## Quickstart
