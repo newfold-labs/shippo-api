@@ -19,7 +19,7 @@ final class CarrierParcelTemplates extends AbstractResource
 {
     protected function resourcePath(): string
     {
-        return 'carrier-parcel-templates';
+        return 'parcel-templates';
     }
 
     /**
